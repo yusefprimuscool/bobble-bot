@@ -13,7 +13,7 @@ class Talker(Node):
 
     def send_message(self):
         msg = String()
-        msg.data = f'Hello from Yusef: {self.count}'
+        msg.data = f'Hi from Yusef: {self.count}'
         self.publisher.publish(msg)
         self.get_logger().info(f'Publishing: {msg.data}')
         self.count += 1
