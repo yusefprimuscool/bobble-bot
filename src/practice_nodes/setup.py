@@ -25,6 +25,7 @@ setup(
         entry_points={
         'console_scripts': [
             'talker = practice_nodes.talker:main',
+            'listener = practice_nodes.listener:main',
         ],
     },
 )
