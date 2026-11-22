@@ -32,21 +32,41 @@
   </xacro:right_wheel>
 
   <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" >
-      <robotNamespace>/bobble</robotNamespace>
-      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-      <controlPeriod>0.002</controlPeriod>
-      <legacyModeNS>false</legacyModeNS>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+  </gazebo>
+  
+  <gazebo>
+    <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find bobble_description)/config/controllers.yaml</parameters>
     </plugin>
-    <plugin name='gazebo_ros_imu' filename='libhector_gazebo_ros_imu.so'>
-      <alwaysOn>true</alwaysOn>
-      <updateRate>200.0</updateRate>
-      <bodyName>bno055_imu_link</bodyName>
-      <topicName>/imu_bosch/data_raw</topicName>
-      <gaussianNoise>0.02</gaussianNoise>
-      <xyzOffsets>0 0 0</xyzOffsets>
-      <rpyOffsets>0 0 0</rpyOffsets>
-    </plugin>
+  </gazebo>
+
+
+
+  <ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="left_wheel_hinge">
+      <command_interface name="effort"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_hinge">
+      <command_interface name="effort"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+
+
+  <gazebo reference="bno055_imu_link">
+    <sensor name="bno055_imu" type="imu">
+      <always_on>true</always_on>
+      <update_rate>200</update_rate>
+      <topic>imu</topic>
+    </sensor>
   </gazebo>
 
 </robot>
